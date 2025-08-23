@@ -1,2 +1,2 @@
-# STM32-CODE-LVGL-TETRIS
-TETRIS GAME ON NUCLEO BOARD AND TFT OLED (LUMI) USING LVGL 
+# Update Core Logic Gmae
+viết những phần logic chính, chưa gọi api hardware, graphic.
