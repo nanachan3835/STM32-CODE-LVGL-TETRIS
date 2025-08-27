@@ -1,8 +1,6 @@
 #include "graphics.h"
 #include "ssd1306.h"   // driver phần cứng
 
-/* ====== Nội bộ ========================================================= */
-
 // map BlockType -> pixel intensity
 static uint8_t block_color(BlockType type) {
     if (type == BLOCK_NONE) return 0;
@@ -21,7 +19,7 @@ static void draw_cell(int8_t x, int8_t y, BlockType type) {
     }
 }
 
-/* ====== API công khai ================================================== */
+/*  API công khai */
 
 void Gfx_Init(void) {
     ssd1306_Init();
