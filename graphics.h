@@ -1,5 +1,4 @@
-/*  graphics.h  —  Module hiển thị Tetris cho STM32F401RE
- *  Ghi chú : Sử dụng dữ liệu từ logic.h để vẽ bàn, khối rơi, ghost, next block */
+/*  graphics.h  —  Module hiển thị Tetris cho STM32*/
 
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
