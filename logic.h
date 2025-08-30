@@ -1,6 +1,5 @@
 /* ============================================================================
- *  logic.h  —  Game logic 6 khối tùy chỉnh cho STM32F401RE
- *  Tác giả : Embedded Developer  
+ *  logic.h  —  Game logic 6 khối tùy chỉnh cho STM32F401RE  
  *  Ghi chú : 6 khối I, L, O, T, U, PLUS - tối ưu cho STM32
  * ========================================================================== */
 
