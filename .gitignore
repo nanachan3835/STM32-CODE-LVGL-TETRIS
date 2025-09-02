@@ -1,0 +1,7 @@
+.settings/
+Debug/
+Startup/
+*.project
+*.ld
+*.cfg
+*.launch
