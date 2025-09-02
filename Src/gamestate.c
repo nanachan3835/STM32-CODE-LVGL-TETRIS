@@ -80,17 +80,22 @@ void GameState_ProcessTick(void) {
             GameSummary summary;
             Game_GetSummary(&summary);
 
-            Gfx_DrawBoard(); // Vẽ lại bàn chơi
+            //Gfx_DrawBoard(); // Vẽ lại bàn chơi
             Gfx_DrawNext(summary.next_block); // Cập nhật khối tiếp theo
             Gfx_DrawStats(&summary.stats); // Cập nhật điểm
             Gfx_Refresh();
         }
+        else {
+                    // Nếu không có sự kiện gì đặc biệt (chỉ rơi xuống),
+                    // chúng ta vẫn phải vẽ lại bàn chơi để thấy được sự di chuyển.
+
+                    Gfx_Refresh();
+                }
     }
 }
 
 void GameState_ProcessInput(uint8_t physical_button_id) {
     bool needs_full_render = false;
-    BuzzerControl_SetMelody(pbeep);
     switch (s_current_state) {
         case GAME_STATE_START_MENU:
             if (physical_button_id == BUTTON_ID_CENTER) {
@@ -108,7 +113,7 @@ void GameState_ProcessInput(uint8_t physical_button_id) {
                     // Chức năng Hard Drop khi nhấn nút giữa lúc đang chơi
                     Game_HardDrop(NULL);
                     // Sau khi hard drop, cần cập nhật toàn bộ vì có thể có xóa hàng
-                    needs_full_render = true;
+                    //needs_full_render = true;
                     break;
             }
             break;

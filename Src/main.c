@@ -16,8 +16,10 @@ void GameTick_Callback(void) {
 }
 
 int main(void) {
+	//SystemClock_Config();
     SystemCoreClockUpdate();
     TimerInit();
+    //MX_TIM2_Init();
 
     // Khởi tạo các module cấp thấp của Lumi
     Button_Init();
@@ -29,8 +31,8 @@ int main(void) {
     BuzzerControl_Init();         // Khởi tạo buzzer
     // Tạo một timer phần mềm để gọi GameTick_Callback
     // Ví dụ: TICK_HZ = 30 -> 1000ms / 30 ~= 33ms
-    TimerStart("GameTick", 500, TIMER_REPEAT_FOREVER, (void*)GameTick_Callback, NULL);
-
+    TimerStart("GameTick", 33, TIMER_REPEAT_FOREVER, (void*)GameTick_Callback, NULL);
+    //HAL_TIM_Base_Start_IT(&htim2);
     while (1) {
         // Vòng lặp chính chỉ cần chạy bộ lập lịch timer của Lumi
         processTimerScheduler();
