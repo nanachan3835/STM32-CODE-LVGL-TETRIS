@@ -17,9 +17,9 @@ extern "C" {
 /* ====== Cấu hình game =================================================== */
 #define BOARD_W                 10      // Số cột
 #define BOARD_H                 20      // Số hàng  
-#define TICK_HZ                 30      // Tần số logic (Hz)
+#define TICK_HZ                 25      // Tần số logic (Hz)
 #define LOCK_DELAY_TICKS        15      // Độ trễ khóa khối (~0.5s)
-#define GRAVITY_BASE_TICKS      30      // Tốc độ rơi cơ bản (1s/ô)
+#define GRAVITY_BASE_TICKS      33      // Tốc độ rơi cơ bản (1s/ô)
 
 // Macro ngắt an toàn cho STM32
 #define CRITICAL_ENTER()        __disable_irq()

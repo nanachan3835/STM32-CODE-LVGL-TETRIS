@@ -10,9 +10,14 @@
 #include "button_handler.h"
 #include "buzzer.h"
 
+//int tick_count=0;
+
 // Callback được gọi bởi Timer của Lumi, với tần số bằng TICK_HZ
 void GameTick_Callback(void) {
     GameState_ProcessTick();
+    //tick_count++;
+    //print("Tick count: %d\n", tick_count);
+
 }
 
 int main(void) {
@@ -31,7 +36,7 @@ int main(void) {
     BuzzerControl_Init();         // Khởi tạo buzzer
     // Tạo một timer phần mềm để gọi GameTick_Callback
     // Ví dụ: TICK_HZ = 30 -> 1000ms / 30 ~= 33ms
-    TimerStart("GameTick", 33, TIMER_REPEAT_FOREVER, (void*)GameTick_Callback, NULL);
+    TimerStart("GameTick", 60, TIMER_REPEAT_FOREVER, (void*)GameTick_Callback, NULL);
     //HAL_TIM_Base_Start_IT(&htim2);
     while (1) {
         // Vòng lặp chính chỉ cần chạy bộ lập lịch timer của Lumi

@@ -241,8 +241,8 @@ static bool handle_gravity(void) {
         s_tick_counter = 0;
         
         if (!check_collision(s_current.x, s_current.y + 1, s_current.shape_mask)) {
-            s_current.y++;
             s_current.lock_timer = 0;  // Reset timer khi còn rơi được
+            s_current.y++;
             return false;  // Chưa chạm đáy
         }
     }

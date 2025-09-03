@@ -31,6 +31,33 @@ static void draw_cell(int8_t x, int8_t y, BlockType type) {
     }
 }
 
+//--- current falling piece ---
+static void draw_current_piece_internal(bool do_erase) {
+    FallingBlock cur;
+    if (Game_GetCurrentBlock(&cur) != GAME_OK) {
+        return;
+    }
+
+    if (do_erase) {
+        ucg_SetColor(&g_ucg, 0, 0, 0, 0);
+    } else {
+        ucg_SetColor(&g_ucg, 0, 255, 255, 255);
+    }
+
+    for (int by = 0; by < 4; by++) {
+        for (int bx = 0; bx < 4; bx++) {
+            if (Game_ShapeBit(cur.shape_mask, bx, by)) {
+                int px, py;
+                get_pixel_coords(cur.x + bx, cur.y + by, &px, &py);
+                ucg_DrawBox(&g_ucg, px, py, CELL_SIZE_PX, CELL_SIZE_PX);
+            }
+        }
+    }
+}
+
+
+
+
 // --- HIỆN THỰC API CÔNG KHAI ---
 
 void Gfx_Init(void) {
@@ -43,6 +70,16 @@ void Gfx_Clear(void) {
     ucg_ClearScreen(&g_ucg);
 }
 
+
+void Gfx_DrawFallingPiece(void) {
+    draw_current_piece_internal(false);
+}
+
+void Gfx_EraseFallingPiece(void) {
+    draw_current_piece_internal(true);
+}
+
+
 void Gfx_DrawBoard(void) {
     // 1. Vẽ khung viền
     ucg_SetColor(&g_ucg, 0, 255, 255, 255);
@@ -52,37 +89,15 @@ void Gfx_DrawBoard(void) {
     for (int y = 0; y < BOARD_H; y++) {
         for (int x = 0; x < BOARD_W; x++) {
             GameCell cell_type = Game_GetBoardCell(x, y);
-            draw_cell(x, y, (BlockType)cell_type);
+            // Chỉ vẽ các ô không trống để tối ưu
+            if (cell_type != BLOCK_NONE) {
+                 draw_cell(x, y, (BlockType)cell_type);
+            }
         }
     }
 
     // 3. Vẽ khối đang rơi
-    FallingBlock cur;
-    if (Game_GetCurrentBlock(&cur) == GAME_OK) {
-        for (int by = 0; by < 4; by++) {
-            for (int bx = 0; bx < 4; bx++) {
-                if (Game_ShapeBit(cur.shape_mask, bx, by)) {
-                    draw_cell(cur.x + bx, cur.y + by, cur.type);
-                }
-            }
-        }
-    }
-
-    // 4. Vẽ bóng khối (ghost piece)
-    int8_t ghost_y = Game_GetGhostY();
-    if (ghost_y >= 0 && cur.type != BLOCK_NONE) {
-        ucg_SetColor(&g_ucg, 0, 255, 255, 255); // Màu trắng
-        for (int by = 0; by < 4; by++) {
-            for (int bx = 0; bx < 4; bx++) {
-                if (Game_ShapeBit(cur.shape_mask, bx, by)) {
-                    int px, py;
-                    get_pixel_coords(cur.x + bx, ghost_y + by, &px, &py);
-                    // Dùng ucg_DrawFrame để vẽ hình chữ nhật rỗng
-                    ucg_DrawFrame(&g_ucg, px, py, CELL_SIZE_PX, CELL_SIZE_PX);
-                }
-            }
-        }
-    }
+//Gfx_DrawFallingPiece();
 }
 
 void Gfx_DrawNext(BlockType next) {
@@ -132,7 +147,6 @@ void Gfx_DrawStats(const GameStats* stats) {
 }
 
 void Gfx_Refresh(void) {
-    // Với Ucglib, việc vẽ thường diễn ra ngay lập tức.
-    // Hàm này được giữ lại để đảm bảo tính nhất quán của API.
-    // Nếu driver màn hình của bạn có buffer, lệnh flush sẽ được đặt ở đây.
+    // Hàm này sẽ vẽ lại toàn bộ bàn chơi, khối tiếp theo và stats
+    // Đảm bảo trạng thái game luôn được cập nhật trên màn hình
 }

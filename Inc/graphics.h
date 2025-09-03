@@ -22,6 +22,19 @@ void Gfx_DrawNext(BlockType next);
 void Gfx_DrawStats(const GameStats* stats);
 void Gfx_Refresh(void); // Dù Ucglib vẽ trực tiếp, giữ hàm này cho API nhất quán
 
+
+// *** CÁC HÀM MỚI ĐỂ RENDER HIỆU QUẢ ***
+/**
+ * @brief Chỉ vẽ khối gạch đang rơi lên màn hình.
+ */
+void Gfx_DrawFallingPiece(void);
+
+/**
+ * @brief Chỉ xóa khối gạch đang rơi khỏi màn hình (vẽ đè màu nền).
+ */
+void Gfx_EraseFallingPiece(void);
+
+
 #ifdef __cplusplus
 }
 #endif

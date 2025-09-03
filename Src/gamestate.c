@@ -66,31 +66,45 @@ void GameState_Init(uint32_t seed) {
 }
 
 void GameState_ProcessTick(void) {
-    if (s_current_state == GAME_STATE_PLAYING) {
-        GameTickEvent event;
-        Game_Tick(&event);
+    if (s_current_state != GAME_STATE_PLAYING) {
+        return;
+    }
 
-        // Nếu game kết thúc, chuyển trạng thái và vẽ lại toàn bộ
-        if (event.game_over) {
-            s_current_state = GAME_STATE_GAME_OVER;
-            render_full_scene();
-        }
-        // Nếu có sự kiện khác (khóa khối, xóa hàng), chỉ cập nhật các phần cần thiết
-        else if (event.block_locked || event.lines_cleared > 0) {
-            GameSummary summary;
-            Game_GetSummary(&summary);
+    // *** BƯỚC 1: XÓA VỊ TRÍ CŨ ***
 
-            //Gfx_DrawBoard(); // Vẽ lại bàn chơi
-            Gfx_DrawNext(summary.next_block); // Cập nhật khối tiếp theo
-            Gfx_DrawStats(&summary.stats); // Cập nhật điểm
-            Gfx_Refresh();
-        }
-        else {
-                    // Nếu không có sự kiện gì đặc biệt (chỉ rơi xuống),
-                    // chúng ta vẫn phải vẽ lại bàn chơi để thấy được sự di chuyển.
+    // *** BƯỚC 2: CẬP NHẬT LOGIC GAME ***
+    GameTickEvent event;
+    Game_Tick(&event); // Engine tự xử lý việc rơi xuống 1 ô
 
-                    Gfx_Refresh();
-                }
+    // *** BƯỚC 3: XỬ LÝ KẾT QUẢ VÀ VẼ LẠI ***
+    if (event.game_over) {
+        s_current_state = GAME_STATE_GAME_OVER;
+        render_full_scene(); // Vẽ lại toàn bộ màn hình game over
+    }
+    else if (event.lines_cleared > 0) {
+        // Nếu có xóa hàng, toàn bộ bàn chơi thay đổi -> vẽ lại toàn bộ
+        render_full_scene();
+    }
+    else if (event.block_locked) {
+        // Khối cũ đã được khóa và trở thành 1 phần của bàn chơi
+        // Khối mới đã được tạo ra
+        // Vẽ lại bàn chơi (bao gồm cả khối vừa khóa) và khối mới
+        Gfx_DrawBoard();
+        
+        // Cập nhật các thông tin phụ
+        GameSummary summary;
+        Game_GetSummary(&summary);
+        Gfx_DrawNext(summary.next_block);
+        Gfx_DrawStats(&summary.stats);
+        
+        //Gfx_Refresh();
+    }
+    else {
+        // **TRƯỜNG HỢP PHỔ BIẾN NHẤT: KHỐI CHỈ RƠI XUỐNG**
+        // Chúng ta đã xóa nó ở vị trí cũ, giờ chỉ cần vẽ nó ở vị trí mới
+        Gfx_DrawFallingPiece();
+        Gfx_EraseFallingPiece();
+        //Gfx_Refresh();
     }
 }
 
@@ -136,7 +150,7 @@ void GameState_ProcessInput(uint8_t physical_button_id) {
         render_full_scene();
     } else if (s_current_state == GAME_STATE_PLAYING) {
         // Sau khi di chuyển/xoay, chỉ cần vẽ lại bàn chơi là đủ, không cần xóa toàn bộ màn hình
-        Gfx_DrawBoard();
-        Gfx_Refresh();
+       Gfx_DrawFallingPiece();
+       Gfx_EraseFallingPiece();
     }
 }
