@@ -17,7 +17,7 @@ extern "C" {
 /* ====== Cấu hình game =================================================== */
 #define BOARD_W                 10      // Số cột
 #define BOARD_H                 20      // Số hàng  
-#define TICK_HZ                 25      // Tần số logic (Hz)
+#define TICK_HZ                 15      // Tần số logic (Hz)
 #define LOCK_DELAY_TICKS        15      // Độ trễ khóa khối (~0.5s)
 #define GRAVITY_BASE_TICKS      33      // Tốc độ rơi cơ bản (1s/ô)
 

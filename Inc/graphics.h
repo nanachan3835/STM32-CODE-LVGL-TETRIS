@@ -34,6 +34,11 @@ void Gfx_DrawFallingPiece(void);
  */
 void Gfx_EraseFallingPiece(void);
 
+void Gfx_DrawStartMenu(void);
+void Gfx_DrawPausedScreen(void);
+void Gfx_DrawGameOverScreen(const GameStats* stats);
+
+
 
 #ifdef __cplusplus
 }
